@@ -56,7 +56,9 @@ jobs:
             $base = $v -replace '\.\d+$', ''
             $v = "$base.${{ github.run_number }}"
           }
-          npm version $v --no-git-tag-version
+          if ($v -ne (node -p "require('./package.json').version")) {
+            npm version $v --no-git-tag-version
+          }
 
       - name: Package & publish (NSIS installer, pre-release)
         # Pre-release status comes from build.publish.releaseType in
