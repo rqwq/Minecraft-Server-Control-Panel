@@ -1,6 +1,6 @@
 import { net } from 'electron'
 
-export const RELEASES_API = 'https://api.github.com/repos/rqwq/Minecraft-Server-Controller/releases/tags'
+export const RELEASES_API = 'https://api.github.com/repos/rqwq/Minecraft-Server-Control-Panel/releases/tags'
 
 /**
  * GET via Electron's `net` (Chromium stack): unlike Node's fetch it honors

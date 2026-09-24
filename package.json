@@ -1,7 +1,7 @@
 {
   "name": "server-controller",
   "productName": "ServerController",
-  "version": "0.1.0",
+  "version": "0.1.4-rc.1",
   "description": "Minecraft local server controller — host any world, console without cheats",
   "main": "./out/main/index.js",
   "author": "rqwq",
@@ -44,7 +44,7 @@
     "publish": {
       "provider": "github",
       "owner": "rqwq",
-      "repo": "Minecraft-Server-Controller",
+      "repo": "Minecraft-Server-Control-Panel",
       "releaseType": "prerelease"
     }
   },

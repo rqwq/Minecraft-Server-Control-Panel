@@ -213,7 +213,7 @@ function WorldRow({
 }
 
 function ServerCard({ profile }: { profile: ServerProfile }): JSX.Element {
-  const { runtime, worldInfos, worldErrors, settings, addWorld, createWorld, deleteServer, setPage, startBusy } =
+  const { runtime, worldInfos, worldErrors, settings, netInfo, addWorld, createWorld, deleteServer, setPage, startBusy } =
     useApp()
   const [creatingWorld, setCreatingWorld] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -223,6 +223,11 @@ function ServerCard({ profile }: { profile: ServerProfile }): JSX.Element {
   const busy = state !== 'stopped' && state !== 'crashed'
   const starting = startBusy[profile.id] ?? false
   const hostedWorldPath = rt?.worldPath ?? null
+  const exposedHost =
+    settings.exposeMode === 'custom' && settings.customAddress
+      ? settings.customAddress
+      : netInfo?.lanIp ?? 'localhost'
+  const address = rt?.address ?? `${exposedHost}:${profile.port}`
   const noVersion =
     (profile.kind === 'vanilla' && !profile.vanillaVersion) ||
     (profile.kind === 'fabric' && (!profile.fabricGame || !profile.fabricLoader)) ||
@@ -256,7 +261,7 @@ function ServerCard({ profile }: { profile: ServerProfile }): JSX.Element {
       </header>
 
       <div className="server-card__meta">
-        <span className="mono">localhost:{profile.port}</span>
+        <span className="mono">{address}</span>
         <span>{profile.memoryGb} GB RAM</span>
         <span>{profile.onlineMode ? 'online mode' : 'offline mode'}</span>
         {profile.clientPackDir ? <span title={profile.clientPackDir}>client pack ✓</span> : null}

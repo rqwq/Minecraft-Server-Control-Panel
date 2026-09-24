@@ -3,7 +3,7 @@ import { autoUpdater } from 'electron-updater'
 import type { UpdateStateEvent } from '../shared/types'
 import { serverRegistry } from './serverProcess'
 
-export const REPO_URL = 'https://github.com/rqwq/Minecraft-Server-Controller'
+export const REPO_URL = 'https://github.com/rqwq/Minecraft-Server-Control-Panel'
 export const DISCORD_USERNAME = '.extremism'
 
 let sendState: ((payload: UpdateStateEvent) => void) | null = null
@@ -14,7 +14,7 @@ let downloading = false
  * Auto-update for packaged (installed) builds only — `npm run dev` never
  * checks and the renderer never shows the update UI there.
  *
- * Updates come from GitHub Releases of rqwq/Minecraft-Server-Controller.
+ * Updates come from GitHub Releases of rqwq/Minecraft-Server-Control-Panel.
  * CI publishes every push to a release* branch as a pre-release ("Preview");
  * allowPrerelease=false means installed apps only ever see releases that
  * have been manually promoted to a full release.

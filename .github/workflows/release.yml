@@ -50,8 +50,13 @@ jobs:
           # package.json "version": "0.2.0" -> published build "0.2.<run number>".
           # Edit only the version in package.json; the tag/release name and the
           # version shown in the app UI both follow it automatically.
-          $base = (node -p "require('./package.json').version") -replace '\.\d+$', ''
-          npm version "$base.${{ github.run_number }}" --no-git-tag-version
+          # A pre-release suffix (e.g. "0.1.4-rc.1") is published verbatim.
+          $v = node -p "require('./package.json').version"
+          if ($v -notmatch '-') {
+            $base = $v -replace '\.\d+$', ''
+            $v = "$base.${{ github.run_number }}"
+          }
+          npm version $v --no-git-tag-version
 
       - name: Package & publish (NSIS installer, pre-release)
         # Pre-release status comes from build.publish.releaseType in
