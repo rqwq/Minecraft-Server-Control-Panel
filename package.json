@@ -38,7 +38,8 @@
     "afterPack": "./scripts/after-pack-fuses.cjs",
     "nsis": {
       "oneClick": true,
-      "perMachine": false
+      "perMachine": false,
+      "differentialPackage": false
     },
     "publish": {
       "provider": "github",
