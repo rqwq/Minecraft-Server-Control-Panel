@@ -77,7 +77,7 @@ export interface RendererApi {
   /** Triggers a check for a new release. Results arrive via onUpdateState. */
   checkUpdate(): Promise<void>
   /** Starts downloading the found update. Progress arrives via onUpdateState. */
-  downloadUpdate(): Promise<void>
+  downloadUpdate(prerelease?: boolean): Promise<void>
   /** Quits the app and runs the installer. Refuses while servers are running. */
   installUpdate(): Promise<void>
 

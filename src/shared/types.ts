@@ -294,7 +294,15 @@ export interface AppInfo {
   packaged: boolean
 }
 
-export type UpdatePhase = 'idle' | 'checking' | 'available' | 'none' | 'downloading' | 'ready' | 'error'
+export type UpdatePhase =
+  | 'idle'
+  | 'checking'
+  | 'available'
+  | 'prerelease-available'
+  | 'none'
+  | 'downloading'
+  | 'ready'
+  | 'error'
 
 export interface UpdateProgress {
   percent: number

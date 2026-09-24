@@ -101,7 +101,7 @@ interface AppContextValue {
   /** "What's new" data while that modal is open; null while closed. */
   whatsNew: { version: string; notes: string | null } | null
   dismissWhatsNew(): void
-  downloadUpdate(): Promise<void>
+  downloadUpdate(prerelease?: boolean): Promise<void>
   installUpdate(): Promise<void>
   setPage(page: Page): void
   openConsole(serverId: string): void
@@ -630,7 +630,8 @@ export function AppProvider({ children }: { children: ReactNode }): JSX.Element 
     // Skipping an available update (without pressing the update button) shows
     // what the user is missing: the release notes of that version.
     const state = updateStateRef.current
-    const skippedVersion = state?.phase === 'available' ? state.version : undefined
+    const skippedVersion =
+      state?.phase === 'available' || state?.phase === 'prerelease-available' ? state.version : undefined
     if (!skippedVersion) return
     void (async () => {
       let notes: string | null = null
@@ -651,9 +652,9 @@ export function AppProvider({ children }: { children: ReactNode }): JSX.Element 
     setWhatsNew(null)
   }, [])
 
-  const downloadUpdate = useCallback(async (): Promise<void> => {
+  const downloadUpdate = useCallback(async (prerelease = false): Promise<void> => {
     try {
-      await window.api.downloadUpdate()
+      await window.api.downloadUpdate(prerelease)
     } catch (err) {
       pushToast('error', err instanceof Error ? err.message : String(err))
     }
@@ -681,6 +682,10 @@ export function AppProvider({ children }: { children: ReactNode }): JSX.Element 
         // The startup gate shows the update full-screen; only background
         // (30-minute) finds pop the small card.
         if (!startupGateRef.current) setUpdatePopup(true)
+      }
+      if (state.phase === 'prerelease-available') {
+        setStartupGate(false)
+        setUpdatePopup(true)
       }
       if (state.phase === 'none' || state.phase === 'error') {
         setStartupGate(false)

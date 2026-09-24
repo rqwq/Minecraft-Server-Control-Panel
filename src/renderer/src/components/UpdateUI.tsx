@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react'
 import { useApp } from '../state/AppState'
 import { Icon } from './Icon'
+import { Banner } from './Banner'
 import { FooterContacts } from './FooterContacts'
+import { renderBlocks } from './WhatsNewModal'
 import { formatBytes, type UpdateStateEvent } from '../../../shared/types'
 
 /**
@@ -14,6 +17,42 @@ function UpdateCard({ variant }: { variant: 'gate' | 'popup' }): JSX.Element {
     Object.values(runtime).some((r) => r.state !== 'stopped') || Object.values(startBusy).some(Boolean)
   const busyHint = variant === 'popup' && serverBusy
 
+  const phase = updateState?.phase
+  const offerVersion =
+    phase === 'available' || phase === 'prerelease-available' ? updateState?.version : undefined
+  const prerelease = phase === 'prerelease-available'
+  const [notes, setNotes] = useState<string | null>(null)
+  const [notesLoading, setNotesLoading] = useState(false)
+
+  useEffect(() => {
+    if (!offerVersion) return
+    let cancelled = false
+    setNotes(null)
+    setNotesLoading(true)
+    void window.api
+      .releaseNotes(offerVersion)
+      .then((body) => {
+        if (cancelled) return
+        setNotes(body)
+        setNotesLoading(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setNotes(null)
+        setNotesLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [offerVersion])
+
+  const renderNotes = (): JSX.Element | null => {
+    if (!offerVersion) return null
+    if (notes) return <div className="update-card__notes">{renderBlocks(notes)}</div>
+    if (notesLoading) return <div className="update-card__text">Loading release notes…</div>
+    return null
+  }
+
   const renderChecking = (): JSX.Element => (
     <div className="update-card__checking">
       <div className="spinner" />
@@ -23,25 +62,36 @@ function UpdateCard({ variant }: { variant: 'gate' | 'popup' }): JSX.Element {
   )
 
   const renderBody = (state: UpdateStateEvent): JSX.Element => {
-    if (state.phase === 'available') {
+    if (state.phase === 'available' || state.phase === 'prerelease-available') {
       return (
         <div className="update-card__body">
-          <div className="update-card__title">Update available — v{state.version}</div>
-          <div className="update-card__text">
-            Download and install the new version{variant === 'gate' ? ' to continue using the app' : ''}.
+          <div className="update-card__title">
+            {state.phase === 'prerelease-available' ? 'Pre-release available' : 'Update available'} — v
+            {state.version}
           </div>
+          {prerelease ? (
+            <Banner kind="warn">
+              This version is a pre-release — it may contain bugs and issues.
+            </Banner>
+          ) : null}
+          <div className="update-card__text">
+            {prerelease
+              ? 'There is no stable release newer than your version yet — you can try the pre-release or skip until the next check.'
+              : `Download and install the new version${variant === 'gate' ? ' to continue using the app' : ''}.`}
+          </div>
+          {renderNotes()}
           {busyHint ? <div className="update-card__hint">Stop the running server to update.</div> : null}
           <div className="update-card__actions">
             <button
               type="button"
               className="btn btn--primary"
               disabled={busyHint}
-              onClick={() => void downloadUpdate()}
+              onClick={() => void downloadUpdate(prerelease)}
             >
               <Icon name="download" size={16} />
               Download & install
             </button>
-            {variant === 'popup' ? (
+            {variant === 'popup' || prerelease ? (
               <button type="button" className="btn btn--ghost" onClick={dismissUpdatePopup}>
                 Skip until next check
               </button>

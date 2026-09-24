@@ -32,8 +32,6 @@ export function initUpdater(getWindow: () => BrowserWindow | null): void {
   autoUpdater.allowDowngrade = false
 
   autoUpdater.on('checking-for-update', () => sendState?.({ phase: 'checking' }))
-  autoUpdater.on('update-available', (info) => sendState?.({ phase: 'available', version: info.version }))
-  autoUpdater.on('update-not-available', () => sendState?.({ phase: 'none' }))
   autoUpdater.on('download-progress', (progress) =>
     sendState?.({
       phase: 'downloading',
@@ -47,6 +45,7 @@ export function initUpdater(getWindow: () => BrowserWindow | null): void {
   )
   autoUpdater.on('update-downloaded', (info) => {
     downloading = false
+    autoUpdater.allowPrerelease = false
     sendState?.({ phase: 'ready', version: info.version })
   })
   autoUpdater.on('error', (err) => {
@@ -61,19 +60,33 @@ export async function checkForUpdate(): Promise<void> {
   if (!app.isPackaged || checking) return
   checking = true
   try {
-    await autoUpdater.checkForUpdates()
+    autoUpdater.allowPrerelease = false
+    const stable = await autoUpdater.checkForUpdates()
+    if (stable?.isUpdateAvailable) {
+      sendState?.({ phase: 'available', version: stable.updateInfo.version })
+      return
+    }
+    autoUpdater.allowPrerelease = true
+    const pre = await autoUpdater.checkForUpdates()
+    sendState?.(
+      pre?.isUpdateAvailable
+        ? { phase: 'prerelease-available', version: pre.updateInfo.version }
+        : { phase: 'none' }
+    )
   } catch {
     // swallowed on purpose: the autoUpdater 'error' event already told the
     // renderer, and an unhandled rejection here would echo into the IPC log
   } finally {
+    autoUpdater.allowPrerelease = false
     checking = false
   }
 }
 
 /** Download the found update (started only by an explicit user click). */
-export async function downloadUpdate(): Promise<void> {
+export async function downloadUpdate(prerelease = false): Promise<void> {
   if (!app.isPackaged || downloading) return
   downloading = true
+  autoUpdater.allowPrerelease = prerelease
   try {
     await autoUpdater.downloadUpdate()
   } catch {

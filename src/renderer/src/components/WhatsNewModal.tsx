@@ -84,25 +84,36 @@ export function renderBlocks(markdown: string): ReactNode[] {
   const lines = markdown.split(/\r?\n/)
   const blocks: ReactNode[] = []
   let list: string[] = []
+  let ordered = false
   let key = 0
 
   const flushList = (): void => {
     if (list.length === 0) return
     const items = list
+    const isOrdered = ordered
     list = []
+    ordered = false
+    const rendered = items.map((item, i) => <li key={i}>{renderInline(item, `li-${key}-${i}`)}</li>)
     blocks.push(
-      <ul className="whatsnew__list" key={`ul-${key++}`}>
-        {items.map((item, i) => (
-          <li key={i}>{renderInline(item, `li-${key}-${i}`)}</li>
-        ))}
-      </ul>
+      isOrdered ? (
+        <ol className="whatsnew__list" key={`ol-${key++}`}>
+          {rendered}
+        </ol>
+      ) : (
+        <ul className="whatsnew__list" key={`ul-${key++}`}>
+          {rendered}
+        </ul>
+      )
     )
   }
 
   for (const raw of lines) {
     const line = raw.trimEnd()
-    if (/^[-*]\s+/.test(line)) {
-      list.push(line.replace(/^[-*]\s+/, ''))
+    const bullet = /^[-*]\s+/.exec(line)
+    const numbered = /^\d+[.)]\s+/.exec(line)
+    if (bullet || numbered) {
+      if (list.length === 0) ordered = Boolean(numbered)
+      list.push(line.replace(/^(?:[-*]|\d+[.)])\s+/, ''))
       continue
     }
     flushList()

@@ -249,7 +249,7 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
 
   ipcMain.handle('update:check', () => checkForUpdate())
 
-  ipcMain.handle('update:download', () => downloadUpdate())
+  ipcMain.handle('update:download', (_event, prerelease: boolean) => downloadUpdate(prerelease))
 
   ipcMain.handle('update:install', () => installUpdate())
 
