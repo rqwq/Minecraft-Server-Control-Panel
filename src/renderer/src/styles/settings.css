@@ -1,0 +1,164 @@
+/* ---------- java list ---------- */
+
+.java-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.java-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #12161e;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.java-row:hover {
+  border-color: var(--border-strong);
+  background: var(--panel-2);
+}
+
+.java-row--active {
+  border-color: rgba(63, 185, 80, 0.45);
+  background: var(--accent-soft);
+}
+
+.java-row__path {
+  flex: 1;
+  font-size: 12.5px;
+  color: #c8d2e2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.java-row__source {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ---------- server kind ---------- */
+
+.kind-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 980px) {
+  .kind-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kind-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #12161e;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.kind-card:hover {
+  border-color: var(--border-strong);
+}
+
+.kind-card--active {
+  border-color: rgba(63, 185, 80, 0.5);
+  background: var(--accent-soft);
+}
+
+.kind-card__label {
+  font-weight: 650;
+}
+
+.kind-card__description {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.kind-panel {
+  margin-top: 14px;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kind-panel--two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.custom-dir-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.custom-dir-row .input--static {
+  flex: 1;
+}
+
+/* ---------- hosting ---------- */
+
+.hosting-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 980px) {
+  .hosting-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- installed loader servers ---------- */
+
+.loader-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loader-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #12161e;
+}
+
+.loader-row__name {
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.loader-row__dir {
+  flex: 1;
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

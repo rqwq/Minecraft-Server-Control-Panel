@@ -1,0 +1,172 @@
+/* ---------- console header ---------- */
+
+.console-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.address-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--panel);
+  color: #c8d2e2;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.address-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ---------- console body ---------- */
+
+/* The console page is pinned to the viewport height: the log view flexes into
+   the remaining space and scrolls internally, instead of growing the page. */
+.page--console {
+  height: 100%;
+  min-height: 0;
+}
+
+.console-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.logview-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.logview {
+  flex: 1;
+  min-height: 160px;
+  overflow-y: auto;
+  background: #0a0d11;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+.logview__empty {
+  color: var(--muted);
+  font-family: var(--font);
+}
+
+.log-line {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.log-line__time {
+  color: #525d70;
+  flex-shrink: 0;
+  font-size: 11.5px;
+}
+
+.log-line__text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #c9d1d9;
+}
+
+.log-line--warn .log-line__text {
+  color: #e3c372;
+}
+
+.log-line--error .log-line__text {
+  color: #f9857e;
+}
+
+.logview__jump {
+  position: absolute;
+  bottom: 14px;
+  right: 22px;
+  background: var(--panel-2);
+}
+
+/* ---------- command input ---------- */
+
+.console-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.command-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0a0d11;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 8px 10px 8px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.command-input:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.command-input__prompt {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.command-input__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13.5px;
+}
+
+.command-input__input::placeholder {
+  color: #525d70;
+}
+
+.command-input__input:disabled {
+  opacity: 0.5;
+}
+
+/* ---------- quick commands ---------- */
+
+.quick-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-op {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.quick-op .chip--action {
+  font-family: var(--font);
+}

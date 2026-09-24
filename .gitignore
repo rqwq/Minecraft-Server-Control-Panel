@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+scripts/.nbt.bundle.mjs
+scripts/.*.bundle.mjs
+*.local
+.DS_Store
+
+# Not published yet — the repo stays without a README for now.
+README.md
+
+# Local ZCode (coding agent) workspace state.
+.zcode/
+.zcodeignore

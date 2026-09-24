@@ -1,0 +1,55 @@
+/* ---------- server files ---------- */
+
+.files-card__head {
+  align-items: flex-start;
+}
+
+.files-card__heading {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.files-card__heading .card__title {
+  margin-bottom: 0;
+}
+
+.files-card__heading .card__note {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.files-card__actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.files-card--drag {
+  border-color: rgba(63, 185, 80, 0.65);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow);
+}
+
+.files-empty {
+  margin-top: 14px;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  text-align: center;
+}
+
+.files-empty .icon {
+  color: var(--accent);
+}
+
+.files-empty p {
+  font-size: 13px;
+}

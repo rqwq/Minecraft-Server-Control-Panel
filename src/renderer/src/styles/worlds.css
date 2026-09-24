@@ -1,0 +1,101 @@
+/* ---------- empty state ---------- */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 64px 32px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 16px;
+  background: rgba(22, 26, 34, 0.45);
+}
+
+.empty-state__icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.empty-state__title {
+  font-size: 18px;
+}
+
+.empty-state__text {
+  color: var(--muted);
+  font-size: 13.5px;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+.empty-state__text code {
+  font-size: 12px;
+}
+
+/* ---------- worlds grid ---------- */
+
+.worlds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .worlds-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(35, 42, 54, 0.6);
+  font-size: 13.5px;
+}
+
+.meta-row:last-of-type {
+  border-bottom: none;
+}
+
+.meta-row__label {
+  color: var(--muted);
+}
+
+.meta-row__value {
+  font-weight: 570;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.meta-row__value--mono {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #c8d2e2;
+}
+
+.worlds-grid .card__note {
+  margin-top: 14px;
+}
+
+/* ---------- create new world ---------- */
+
+.empty-state__actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}

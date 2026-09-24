@@ -1,0 +1,67 @@
+{
+  "name": "server-controller",
+  "productName": "ServerController",
+  "version": "0.1.0",
+  "description": "Minecraft local server controller — host any world, console without cheats",
+  "main": "./out/main/index.js",
+  "author": "rqwq",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "check:build": "node scripts/check-build.mjs",
+    "preview": "electron-vite preview",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json",
+    "typecheck:web": "tsc --noEmit -p tsconfig.json",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "smoke:nbt": "esbuild src/main/nbt.ts --bundle --format=esm --platform=node --outfile=scripts/.nbt.bundle.mjs && node scripts/smoke-nbt.mjs",
+    "smoke:world": "esbuild src/main/world.ts --bundle --format=esm --platform=node --outfile=scripts/.world.bundle.mjs && node scripts/smoke-world.mjs",
+    "smoke:backups": "esbuild src/main/backups.ts --bundle --format=esm --platform=node --outfile=scripts/.backups.bundle.mjs && node scripts/smoke-backups.mjs",
+    "smoke:files": "esbuild src/main/files.ts --bundle --format=esm --platform=node --alias:electron=./scripts/electron-stub.mjs --outfile=scripts/.files.bundle.mjs && node scripts/smoke-files.mjs",
+    "smoke": "npm run smoke:nbt && npm run smoke:world && npm run smoke:backups && npm run smoke:files",
+    "dist": "electron-vite build && electron-builder --win"
+  },
+  "build": {
+    "appId": "com.rqwq.servercontroller",
+    "productName": "ServerController",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "afterPack": "./scripts/after-pack-fuses.cjs",
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "rqwq",
+      "repo": "Minecraft-Server-Controller"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@electron/fuses": "^2.1.3",
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "esbuild": "^0.24.0",
+    "javascript-obfuscator": "^5.8.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

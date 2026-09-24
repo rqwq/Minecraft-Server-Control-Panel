@@ -1,0 +1,73 @@
+name: Build release
+
+# Every push to any branch whose name starts with "release" (release,
+# release/2.0, release-beta, ...) is compiled and published to GitHub
+# Releases as a PRE-RELEASE ("Preview"). Installed apps only ever pick up
+# releases that are manually promoted out of pre-release.
+#
+# The app version is <major.minor from package.json>.<run number> — the
+# workflow run counter only ever increases, so every published build sorts as
+# newer than the previous one.
+# NOTE: deleting and recreating this workflow file resets the counter and
+# would make version numbers go backwards (installed apps would then ignore
+# "newer" builds until the counter catches up).
+
+on:
+  push:
+    branches: ['release**']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build renderer & main
+        run: npm run build
+
+      # The production build obfuscates every emitted JS chunk; this verifies
+      # the obfuscated bundles still parse and their ESM wiring still agrees.
+      - name: Check obfuscated build output
+        run: npm run check:build
+
+      - name: Set version (base from package.json + run number)
+        shell: pwsh
+        run: |
+          # package.json "version": "0.2.0" -> published build "0.2.<run number>".
+          # Edit only the version in package.json; the tag/release name and the
+          # version shown in the app UI both follow it automatically.
+          $base = (node -p "require('./package.json').version") -replace '\.\d+$', ''
+          npm version "$base.${{ github.run_number }}" --no-git-tag-version
+
+      - name: Package & publish (NSIS installer, pre-release)
+        run: npx electron-builder --win nsis --publish always --prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Publishes the official app.asar hash as a release asset. Installed
+      # apps fetch it at startup and compare against their own app.asar —
+      # a mismatch (or a version that was never released by us) makes the
+      # app show the "unofficial copy" warning instead of starting.
+      - name: Publish app.asar integrity hash
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $v = node -p "require('./package.json').version"
+          $hash = (Get-FileHash 'dist\win-unpacked\resources\app.asar' -Algorithm SHA256).Hash.ToLower()
+          Set-Content -Path dist\asar.sha256 -Value $hash -NoNewline -Encoding ascii
+          gh release upload "v$v" dist\asar.sha256 --clobber --repo "$env:GITHUB_REPOSITORY"
