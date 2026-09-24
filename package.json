@@ -43,7 +43,8 @@
     "publish": {
       "provider": "github",
       "owner": "rqwq",
-      "repo": "Minecraft-Server-Controller"
+      "repo": "Minecraft-Server-Controller",
+      "releaseType": "prerelease"
     }
   },
   "dependencies": {

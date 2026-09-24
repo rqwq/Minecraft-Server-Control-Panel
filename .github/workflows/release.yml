@@ -54,7 +54,9 @@ jobs:
           npm version "$base.${{ github.run_number }}" --no-git-tag-version
 
       - name: Package & publish (NSIS installer, pre-release)
-        run: npx electron-builder --win nsis --publish always --prerelease
+        # Pre-release status comes from build.publish.releaseType in
+        # package.json — electron-builder has no --prerelease CLI flag.
+        run: npx electron-builder --win nsis --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
