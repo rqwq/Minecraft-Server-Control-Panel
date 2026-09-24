@@ -16,13 +16,25 @@ not:
   * compile, build, or distribute it, or any derivative work of it;
   * present any copy or modified build of it as your own.
 
+This restriction applies to any modified, obfuscated, re-compiled,
+renamed, or partial version of the source code, regardless of the
+changes made, and regardless of how those changes were produced.
+
+Forking this repository through GitHub's built-in functionality does
+not grant any rights beyond viewing it on GitHub. Cloning, building,
+modifying, or redistributing a fork — or any part of it —
+outside of GitHub's viewing functionality is not authorized.
+
 The only authorized distribution of ServerController is the official
 Releases page of this repository. Unauthorized copies, modified builds,
 and reuploads infringe the copyright and will be removed via DMCA
-takedown and pursued by any other available legal remedies.
+takedown and may be pursued by any other available legal remedies.
 
 THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 OR IMPLIED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
 CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+This license is governed by the laws of the Russian Federation, without
+regard to conflict of law principles.
 
 For permissions or questions, contact .extremism on Discord.
